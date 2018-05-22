@@ -37,11 +37,6 @@ public class server
         catch (Exception e)
         {
           System.out.println(e.getMessage());
-          
-
-
-
-
           socket.close();
         }
         finally
@@ -55,3 +50,26 @@ public class server
       listener.close();
     }
   }
+  
+public void writemsg(String str)
+    throws IOException
+  {
+    BufferedWriter fw = null;
+    File file = new File("C:\\Users\\YiTing\\Desktop\\test.txt");
+    fw = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(file, true), "UTF-8"));
+    try
+    {
+      fw.append("msg:");
+      fw.append(str);
+      fw.newLine();
+    }
+    catch (Exception e)
+    {
+      System.out.println(e.getMessage());
+    }
+    finally
+    {
+      fw.close();
+    }
+  }
+}
