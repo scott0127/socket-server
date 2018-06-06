@@ -1,0 +1,57 @@
+// ConsoleApplication4.cpp: 定義主控台應用程式的進入點。
+//
+
+#include "stdafx.h"
+#pragma comment(lib, "ws2_32.lib")
+
+#include<iostream>
+
+#include<WinSock2.h>
+
+using namespace std;
+
+int main() {
+	WSADATA wsadata;
+
+	WORD version = MAKEWORD(2, 2);
+	int iResult = WSAStartup(version, &wsadata);
+	if (iResult != 0) {
+		cout << "DLL Error!" << endl
+			;
+	}
+	char ad[200];
+	int port;
+	cout << "Enter IP you want to connect:";
+	cin >> ad;
+	cout << "Enter port number you want to connect:";
+	cin >> port;
+	SOCKET ClientSocket = INVALID_SOCKET;
+	ClientSocket = socket(AF_INET, SOCK_STREAM, IPPROTO_TCP);
+	if (ClientSocket == INVALID_SOCKET) {
+		cout << "Client socket Error!" << endl;
+	}
+
+	SOCKADDR_IN addr;
+	memset(&addr, 0, sizeof(addr));
+	addr.sin_addr.s_addr = inet_addr(ad);
+	addr.sin_family = AF_INET;
+	addr.sin_port = htons(port);
+
+	int c = connect(ClientSocket, (SOCKADDR*)&addr, sizeof(addr));
+	if (c != SOCKET_ERROR) {
+		cout << "Connect to Server" << endl;
+	}
+	char message[2000];
+	ZeroMemory(message, 2000);
+	const char *s = "410585026 \n";
+	int se;
+	send(ClientSocket, s, (int)strlen(s), 0);
+
+	recv(ClientSocket, message, sizeof(message), 0);
+	cout << message << endl;
+
+	closesocket(ClientSocket);
+	system("pause");
+}
+
+
